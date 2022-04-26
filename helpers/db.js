@@ -1,7 +1,6 @@
-import { Op, Sequelize } from "sequelize";
+import { Op, Sequelize } from 'sequelize'
 
-
-const { DB_USER, DB_PASSWORD, DB_NAME, DB_PORT, DB_HOST, DB_LOG } = process.env;
+const { DB_USER, DB_PASSWORD, DB_NAME, DB_PORT, DB_HOST, DB_LOG } = process.env
 const operatorsAliases = {
   $eq: Op.eq,
   $ne: Op.ne,
@@ -49,8 +48,8 @@ const db = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
   host: DB_HOST,
   port: DB_PORT,
   dialect: 'mysql',
-  logging: true,//!!DB_LOG,
-  operatorsAliases,
-});
+  logging: true, //! !DB_LOG,
+  operatorsAliases
+})
 
-export default db;
+export default db

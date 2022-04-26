@@ -67,7 +67,8 @@ class CustomersController {
 
   static addAddress = async (req, res, next) => {
     try {
-      const customerId = 6146462449887
+      // const customerId = 6146462449887
+      const { customerId } = req.body
       const data = await client.get({
         path: `customers/${customerId}/addresses`
       })

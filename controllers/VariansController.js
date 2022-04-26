@@ -8,10 +8,11 @@ class VariansController {
   static getSopifyVariants = async (req, res, next) => {
     try {
       const client = new Shopify.Clients.Rest('amazing-firm.myshopify.com', accessToken)
-      const { productId } = req.body
+      const { productId } = req.query
       const data = await client.get({
         path: `products/${productId}/variants`
       })
+
       // const variant=data.body.variants
       const addVariant = await Variants.bulkCreate(data.body.variants.map(v => ({
         source_id: v.id,
@@ -24,7 +25,6 @@ class VariansController {
         option2: v.option2,
         option3: v.option3,
         inventory_item_id: v.inventory_item_id
-
       })))
       res.json({
         status: 'ok',
@@ -58,6 +58,26 @@ class VariansController {
       })
     } catch (e) {
       console.log(e)
+      next(e)
+    }
+  }
+
+  static getVariantsProducts = async (req, res, next) => {
+    try {
+      const variants = await Variants.findAll({
+        where: {},
+        include: [{
+          model: Products,
+          as: 'products',
+          where: {}
+        }]
+      })
+      // variants.map((v) => v.product_id)
+      res.json({
+        status: 'ok',
+        variants
+      })
+    } catch (e) {
       next(e)
     }
   }

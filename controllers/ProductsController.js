@@ -172,6 +172,7 @@ class ProductsController {
         option2: v.option2,
         option3: v.option3,
         inventory_item_id: v.inventory_item_id
+        // inventory_quantity: v.inventory_quantity
       })))
       res.json({
         status: 'ok',
@@ -227,6 +228,7 @@ class ProductsController {
             option2: variant.option2,
             option3: variant.option3,
             inventory_item_id: variant.inventory_item_id
+            // inventory_quantity: variant.inventory_quantity
           })
         } else {
           console.log(333)
@@ -241,6 +243,8 @@ class ProductsController {
             option2: variant.option2,
             option3: variant.option3,
             inventory_item_id: variant.inventory_item_id
+            // inventory_quantity: variant.inventory_quantity
+
           })
         }
       })
@@ -294,7 +298,7 @@ class ProductsController {
 
   static productAddToShopify = async (req, res, next) => {
     const {
-      title, body_html, vendor, status
+      title, body_html, vendor, status, variants, options
     } = req.body
 
     try {
@@ -307,7 +311,7 @@ class ProductsController {
           `https://amazing-firm.myshopify.com/admin/api/2022-04/products.json?access_token=${accessToken}`,
           {
             product: {
-              title, body_html, vendor, status
+              title, body_html, vendor, status, variants, options
             }
           }
         ).then((res) => res.data)
@@ -323,7 +327,7 @@ class ProductsController {
 
   static addToShopifyVariants = async (req, res, next) => {
     try {
-      const productId = 7685381488863
+      const { productId } = req.query //= 7688425603295
       const {
         title,
         price,
@@ -359,7 +363,7 @@ class ProductsController {
 
   static updateVariantFromShopify = async (req, res, next) => {
     try {
-      const variantId = 42929820336351
+      const { variantId } = req.query //= 42929820336351
       const {
         title,
         price,
@@ -396,8 +400,8 @@ class ProductsController {
 
   static deleteVariantFromShopify = async (req, res, next) => {
     try {
-      const variantId = 42929470570719
-      const productId = 7685228953823
+      const { variantId } = req.query //= 42929470570719
+      const { productId } = req.query //= 7685228953823
       await axios
         .delete(
           `https://amazing-firm.myshopify.com/admin/api/2022-04/products/${productId}/variants/${variantId}.json?access_token=${accessToken}`
@@ -412,7 +416,8 @@ class ProductsController {
 
   static deleteProductFromShopify = async (req, res, next) => {
     try {
-      const productId = 7682801369311
+      // const productId = 7682801369311
+      const { productId } = req.query
       await axios
         .delete(
           `https://amazing-firm.myshopify.com/admin/api/2022-04/products/${productId}.json?access_token=${accessToken}`
@@ -430,7 +435,7 @@ class ProductsController {
       title, body_html
     } = req.body
     try {
-      const productId = 7680392167647
+      const { productId } = req.query //= 7680392167647
 
       const p = await axios
         .put(

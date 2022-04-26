@@ -53,6 +53,10 @@ Variants.init({
     type: DataTypes.BIGINT.UNSIGNED,
     allowNull: false
   }
+  /* inventory_quantity: {
+    type: DataTypes.INTEGER,
+    allowNull: true
+  } */
 },
 {
   sequelize: db,
@@ -60,17 +64,23 @@ Variants.init({
   tableName: 'variants'
 })
 
-// Variants.belongsTo(Products, {
-//   foreignKey: 'product_id',
-//   targetKey:'source_id',
-//   onUpdate: 'cascade',
-//   onDelete: 'cascade',
-//   as:'products',
-// });
-
+/* Variants.belongsTo(Products, {
+  foreignKey: 'product_id',
+  targetKey: 'source_id',
+  onUpdate: 'cascade',
+  onDelete: 'cascade',
+  as: 'products'
+}) */
+Variants.belongsTo(Products, {
+  foreignKey: 'product_id',
+  targetKey: 'source_id',
+  onUpdate: 'cascade',
+  onDelete: 'cascade',
+  as: 'products'
+})
 Products.hasMany(Variants, {
-  foreignKey: 'id',
-  targetKey: 'product_id',
+  foreignKey: 'product_id',
+  sourceKey: 'source_id',
   onUpdate: 'cascade',
   onDelete: 'cascade',
   as: 'variants'

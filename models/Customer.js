@@ -79,17 +79,17 @@ Customer.init({
   tableName: 'customer'
 })
 
-/* Address.belongsTo(Customer, {
-  foreignKey: 'id',
-  targetKey:'source_id',
+Address.belongsTo(Customer, {
+  foreignKey: 'customer_id',
+  targetKey: 'source_id',
   onUpdate: 'cascade',
   onDelete: 'cascade',
-  as: 'customer',
-});
-*/
+  as: 'customer'
+})
+
 Customer.hasOne(Address, {
-  foreignKey: 'id',
-  targetKey: 'customer_id',
+  foreignKey: 'customer_id',
+  sourceKey: 'source_id',
   onUpdate: 'cascade',
   onDelete: 'cascade',
   as: 'address'

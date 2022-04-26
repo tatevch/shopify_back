@@ -3,7 +3,7 @@ import ProductsController from '../controllers/ProductsController'
 import VariansController from '../controllers/VariansController'
 import CustomersController from '../controllers/CustomersController'
 import OrdersController from '../controllers/OrdersController'
-import OptionsController from '../controllers/OptionsController'
+
 const router = express.Router()
 
 router.get('/shopify-product-list', ProductsController.getShopifyData)
@@ -34,5 +34,6 @@ router.delete('/delete-variant-shopify', ProductsController.deleteVariantFromSho
 router.get('/customer-address', CustomersController.getCusomerWithAddresses)
 router.delete('/delete-product-shopify', ProductsController.deleteProductFromShopify)
 router.put('/update-product-shopify', ProductsController.updateProductFromShopify)
-router.post('/add-options', OptionsController.createOptions)
+router.get('/variant-list', VariansController.getVariantsProducts)
 export default router
+// products-variants?page=4 req.query
