@@ -179,6 +179,7 @@ class CustomersController {
 
   static customerUpdateWebhook = async (req, res, next) => {
     try {
+      console.log(req.body, req.query, req.headers)
       const updateCustomer = await Customer.findOne({
         where: { source_id: req.body.id }
       })
@@ -188,6 +189,22 @@ class CustomersController {
 
       console.log(4)
       const customerShopify = data.body.customers.find(i => i.id === req.body.id)
+
+      updateCustomer.email = customerShopify.email
+      updateCustomer.first_name = req.body.first_name
+      updateCustomer.last_name = req.body.last_name
+      updateCustomer.orders_count = req.body.orders_count
+      updateCustomer.state = req.body.state
+      updateCustomer.total_spent = req.body.total_spent
+      updateCustomer.last_order_id = req.body.last_order_id
+      updateCustomer.verified_email = req.body.verified_email
+      updateCustomer.multipass_identifier = req.body.multipass_identifier
+      updateCustomer.tax_exempt = req.body.tax_exempt
+      updateCustomer.phone = req.body.phone
+      updateCustomer.last_order_name = req.body.last_order_name
+      updateCustomer.currency = req.body.currency
+
+      updateCustomer.save()
       console.log(5)
       const addresses = customerShopify.addresses.filter((i) => i.customer_id === req.body.id)
       const excistAddress = await Address.findAll({

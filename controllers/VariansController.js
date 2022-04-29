@@ -24,7 +24,8 @@ class VariansController {
         option1: v.option1,
         option2: v.option2,
         option3: v.option3,
-        inventory_item_id: v.inventory_item_id
+        inventory_item_id: v.inventory_item_id,
+        inventory_quantity: v.inventory_quantity
       })))
       res.json({
         status: 'ok',
@@ -38,7 +39,7 @@ class VariansController {
 
   static getProductWithVariants = async (req, res, next) => {
     try {
-      const perPage = 2
+      const perPage = 4
       const { page } = req.query
 
       const product = await Products.findAll({

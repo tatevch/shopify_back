@@ -11,24 +11,35 @@ Orders.init({
   },
   source_id: {
     type: DataTypes.BIGINT.UNSIGNED,
+    unique: true,
     allowNull: false
   },
-  product_id: {
+  customer_id: {
     type: DataTypes.BIGINT.UNSIGNED,
+    allowNull: true
+  },
+  /* product_id: {
+    type: DataTypes.JSON,
     allowNull: false
   },
+  product_title:{
+  type:DataTypes.String,
+  allowsNull:true
+  } */
   email: {
     type: DataTypes.STRING,
+    allowNull: true
+  },
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false
+
+  },
+  order_number: {
+    type: DataTypes.INTEGER,
     allowNull: false
   }
 
-}, {
-  indexes: [
-    {
-      unique: true,
-      fields: ['source_id', 'product_id', 'email']
-    }
-  ]
 },
 {
   sequelize: db,

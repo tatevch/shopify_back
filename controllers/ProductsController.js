@@ -171,8 +171,8 @@ class ProductsController {
         option1: v.option1,
         option2: v.option2,
         option3: v.option3,
-        inventory_item_id: v.inventory_item_id
-        // inventory_quantity: v.inventory_quantity
+        inventory_item_id: v.inventory_item_id,
+        quantity: v.inventory_quantity
       })))
       res.json({
         status: 'ok',
@@ -227,8 +227,8 @@ class ProductsController {
             option1: variant.option1,
             option2: variant.option2,
             option3: variant.option3,
-            inventory_item_id: variant.inventory_item_id
-            // inventory_quantity: variant.inventory_quantity
+            inventory_item_id: variant.inventory_item_id,
+            quantity: variant.inventory_quantity
           })
         } else {
           console.log(333)
@@ -242,9 +242,8 @@ class ProductsController {
             option1: variant.option1,
             option2: variant.option2,
             option3: variant.option3,
-            inventory_item_id: variant.inventory_item_id
-            // inventory_quantity: variant.inventory_quantity
-
+            inventory_item_id: variant.inventory_item_id,
+            quantity: variant.inventory_quantity
           })
         }
       })
@@ -298,7 +297,7 @@ class ProductsController {
 
   static productAddToShopify = async (req, res, next) => {
     const {
-      title, body_html, vendor, status, variants, options
+      title, body_html, vendor, status, options, variants
     } = req.body
 
     try {
@@ -311,7 +310,7 @@ class ProductsController {
           `https://amazing-firm.myshopify.com/admin/api/2022-04/products.json?access_token=${accessToken}`,
           {
             product: {
-              title, body_html, vendor, status, variants, options
+              title, body_html, vendor, status, options, variants
             }
           }
         ).then((res) => res.data)
@@ -352,6 +351,9 @@ class ProductsController {
             }
           }
         ).then((res) => res.data)
+        .catch(e => {
+          return e.response.data
+        })
       res.json({
         status: 'ok',
         newvariant
@@ -372,6 +374,7 @@ class ProductsController {
         option1,
         option2,
         option3
+
       } = req.body
       const updateVariant = await axios
         .put(
@@ -388,6 +391,9 @@ class ProductsController {
             }
           }
         ).then((res) => res.data)
+        .catch(e => {
+          return e.response.data
+        })
 
       res.json({
         status: 'ok',
@@ -432,7 +438,7 @@ class ProductsController {
 
   static updateProductFromShopify = async (req, res, next) => {
     const {
-      title, body_html
+      title, body_html, vendor, status
     } = req.body
     try {
       const { productId } = req.query //= 7680392167647
@@ -443,13 +449,65 @@ class ProductsController {
           {
             product: {
               title,
-              body_html
+              body_html,
+              vendor,
+              status
             }
           }
         ).then((res) => res.data)
       res.json({
         status: 'ok',
         p
+      })
+    } catch (e) {
+      next(e)
+    }
+  }
+
+  static getVariantsCount = async (req, res, next) => {
+    try {
+      const productId = 7665229562079
+      const count = await axios
+        .get(
+          `https://amazing-firm.myshopify.com/admin/api/2022-04/products/${productId}/variants/count.json?access_token=${accessToken}`
+
+        ).then((res) => res.data)
+      res.json({
+        status: 'ok',
+        count
+      })
+    } catch (e) {
+      next(e)
+    }
+  }
+
+  static variantsInventoryQuantity = async (req, res, next) => {
+    try {
+      const {
+        inventory_item_id,
+        location_id,
+        available,
+        admin_graphql_api_id
+      } = req.body
+      const quanitiys = await axios
+        .post(
+          `https://amazing-firm.myshopify.com/admin/api/2022-04/inventory_levels/set.json?access_token=${accessToken}`,
+          {
+            // inventory_level: {
+            inventory_item_id,
+            location_id,
+            available,
+            admin_graphql_api_id
+          }
+          // }
+
+        ).then((res) => res.data)
+        .catch(e => {
+          return e.response.data
+        })
+      res.json({
+        status: 'ok',
+        quanitiys
       })
     } catch (e) {
       next(e)

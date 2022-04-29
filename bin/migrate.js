@@ -1,12 +1,14 @@
 import {
-  Products, Variants, Customer, Address
+  Products, Variants, Customer, Address, Orders
 } from '../models'
 
 const models = {
   Products,
   Variants,
   Customer,
-  Address
+  Address,
+  Orders
+
 }
 
 async function main () {

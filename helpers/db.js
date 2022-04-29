@@ -48,7 +48,7 @@ const db = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
   host: DB_HOST,
   port: DB_PORT,
   dialect: 'mysql',
-  logging: true, //! !DB_LOG,
+  logging: !!DB_LOG, // true, //! !DB_LOG,
   operatorsAliases
 })
 

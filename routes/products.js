@@ -27,6 +27,7 @@ router.post('/webhook-create-customer', CustomersController.customerstCreatWebho
 router.post('/webhook-update-customer', CustomersController.customerUpdateWebhook)
 router.post('/webhook-delete-customer', CustomersController.customersDeleteWebhook)
 router.get('/orders-list-shopify', OrdersController.getOrders)
+router.post('/add-orders', OrdersController.AddOrdersFromShopify)
 router.post('/add-product-shopify', ProductsController.productAddToShopify)
 router.post('/add-variant-shopify', ProductsController.addToShopifyVariants)
 router.put('/update-variant-shopify', ProductsController.updateVariantFromShopify)
@@ -35,5 +36,7 @@ router.get('/customer-address', CustomersController.getCusomerWithAddresses)
 router.delete('/delete-product-shopify', ProductsController.deleteProductFromShopify)
 router.put('/update-product-shopify', ProductsController.updateProductFromShopify)
 router.get('/variant-list', VariansController.getVariantsProducts)
+router.get('/variant-count', ProductsController.getVariantsCount)
+router.post('/quantity', ProductsController.variantsInventoryQuantity)
 export default router
 // products-variants?page=4 req.query

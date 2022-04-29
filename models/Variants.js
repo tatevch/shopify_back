@@ -52,11 +52,11 @@ Variants.init({
   inventory_item_id: {
     type: DataTypes.BIGINT.UNSIGNED,
     allowNull: false
-  }
-  /* inventory_quantity: {
+  },
+  quantity: {
     type: DataTypes.INTEGER,
     allowNull: true
-  } */
+  }
 },
 {
   sequelize: db,
