@@ -85,8 +85,8 @@ class ProductsController {
         path: 'webhooks',
         data: {
           webhook: {
-            topic: 'products\/delete',
-            address: 'https:\/\/728e-178-160-242-242.ngrok.io\/products\/webhook-delete-product',
+            topic: 'orders\/cancelled',
+            address: 'https:\/\/728e-178-160-242-242.ngrok.io\/products\/webhook-cancelled-orders',
             format: 'json'
           }
         },
@@ -292,28 +292,26 @@ class ProductsController {
         // deleteProduct
       })
     } catch (e) {
+      next(e)
     }
   }
 
   static productAddToShopify = async (req, res, next) => {
     const {
-      title, body_html, vendor, status, options, variants
+      title, body_html, price, sku, barcode, vendor, product_type, status, options, variants
     } = req.body
 
     try {
-      /* const poxosik=  await axios
-          .get(
-            `https://amazing-firm.myshopify.com/admin/api/2022-04/products.json?access_token=${accessToken}`,
-           ).then((res) => res.data); */
       const p = await axios
         .post(
           `https://amazing-firm.myshopify.com/admin/api/2022-04/products.json?access_token=${accessToken}`,
           {
             product: {
-              title, body_html, vendor, status, options, variants
+              title, body_html, price, sku, barcode, vendor, product_type, status, options, variants
             }
           }
         ).then((res) => res.data)
+        .catch(e => e.response.data)
 
       res.json({
         status: 'ok',
@@ -455,6 +453,9 @@ class ProductsController {
             }
           }
         ).then((res) => res.data)
+        .catch(e => {
+          return e.response.data
+        })
       res.json({
         status: 'ok',
         p
@@ -486,8 +487,8 @@ class ProductsController {
       const {
         inventory_item_id,
         location_id,
-        available,
-        admin_graphql_api_id
+        available
+        // admin_graphql_api_id
       } = req.body
       const quanitiys = await axios
         .post(
@@ -496,8 +497,8 @@ class ProductsController {
             // inventory_level: {
             inventory_item_id,
             location_id,
-            available,
-            admin_graphql_api_id
+            available
+            // admin_graphql_api_id
           }
           // }
 

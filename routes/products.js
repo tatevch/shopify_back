@@ -38,5 +38,8 @@ router.put('/update-product-shopify', ProductsController.updateProductFromShopif
 router.get('/variant-list', VariansController.getVariantsProducts)
 router.get('/variant-count', ProductsController.getVariantsCount)
 router.post('/quantity', ProductsController.variantsInventoryQuantity)
+router.post('/webhook-create-orders', OrdersController.ordersAddWebhook)
+router.post('/craeate-orders', OrdersController.addOrdersToShopify)
+// router.post('/webhook-cancelled-orders', OrdersController.OrdersCancalledWebhook)
 export default router
 // products-variants?page=4 req.query

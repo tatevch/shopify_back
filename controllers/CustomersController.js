@@ -203,7 +203,6 @@ class CustomersController {
       updateCustomer.phone = req.body.phone
       updateCustomer.last_order_name = req.body.last_order_name
       updateCustomer.currency = req.body.currency
-
       updateCustomer.save()
       console.log(5)
       const addresses = customerShopify.addresses.filter((i) => i.customer_id === req.body.id)

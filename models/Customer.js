@@ -1,8 +1,7 @@
 import { DataTypes, Model } from 'sequelize'
 import db from '../helpers/db'
 import Address from './Address'
-import Products from './Products'
-import Variants from './Variants'
+
 class Customer extends Model {
 
 }
