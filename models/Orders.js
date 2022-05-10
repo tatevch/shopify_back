@@ -38,6 +38,10 @@ Orders.init({
   order_number: {
     type: DataTypes.INTEGER,
     allowNull: false
+  },
+  closed_at: {
+    type: DataTypes.DATE,
+    allowNull: true
   }
 
 },

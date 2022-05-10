@@ -85,8 +85,8 @@ class ProductsController {
         path: 'webhooks',
         data: {
           webhook: {
-            topic: 'orders\/cancelled',
-            address: 'https:\/\/728e-178-160-242-242.ngrok.io\/products\/webhook-cancelled-orders',
+            topic: 'orders\/edited',
+            address: 'https:\/\/728e-178-160-242-242.ngrok.io\/products\/webhook-edit-orders',
             format: 'json'
           }
         },
@@ -436,7 +436,7 @@ class ProductsController {
 
   static updateProductFromShopify = async (req, res, next) => {
     const {
-      title, body_html, vendor, status
+      title, body_html, price, sku, barcode, vendor, product_type, status, options, variants
     } = req.body
     try {
       const { productId } = req.query //= 7680392167647
@@ -446,10 +446,7 @@ class ProductsController {
           `https://amazing-firm.myshopify.com/admin/api/2022-04/products/${productId}.json?access_token=${accessToken}`,
           {
             product: {
-              title,
-              body_html,
-              vendor,
-              status
+              title, body_html, price, sku, barcode, vendor, product_type, status, options, variants
             }
           }
         ).then((res) => res.data)
