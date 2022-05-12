@@ -1,5 +1,6 @@
 import { DataTypes, Model } from 'sequelize'
 import db from '../helpers/db'
+import Customer from './Customer'
 class Orders extends Model {
 
 }
@@ -50,6 +51,19 @@ Orders.init({
   modelName: 'orders',
   tableName: 'orders'
 })
-
+Orders.belongsTo(Customer, {
+  foreignKey: 'customer_id',
+  targetKey: 'source_id',
+  onUpdate: 'cascade',
+  onDelete: 'cascade',
+  as: 'customer'
+})
+Customer.hasMany(Orders, {
+  foreignKey: 'customer_id',
+  sourceKey: 'source_id',
+  onUpdate: 'cascade',
+  onDelete: 'cascade',
+  as: 'order'
+})
 export default Orders
-// product_title:title
+

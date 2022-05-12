@@ -85,8 +85,8 @@ class ProductsController {
         path: 'webhooks',
         data: {
           webhook: {
-            topic: 'orders\/edited',
-            address: 'https:\/\/728e-178-160-242-242.ngrok.io\/products\/webhook-edit-orders',
+            topic: 'orders\/updated',
+            address: 'https:\/\/728e-178-160-242-242.ngrok.io\/products\/webhook-orders-update',
             format: 'json'
           }
         },
@@ -119,7 +119,7 @@ class ProductsController {
   static getProductList = async (req, res, next) => {
     try {
       const perPage = 2
-      const { page } = req.body
+      const { page } = req.query
 
       const productList = await Products.findAll({
         where: {},
@@ -464,7 +464,8 @@ class ProductsController {
 
   static getVariantsCount = async (req, res, next) => {
     try {
-      const productId = 7665229562079
+      // const productId = 7665316135135
+      const { productId } = req.query
       const count = await axios
         .get(
           `https://amazing-firm.myshopify.com/admin/api/2022-04/products/${productId}/variants/count.json?access_token=${accessToken}`

@@ -12,7 +12,7 @@ class OrdersController {
       const data = await client.get({
         path: 'orders'
       })
-      const ordersList = data.body.orders.map((i) => i.name)
+      const ordersList = data.body.orders// .map((i) => i.name)
 
       res.json({
         status: 'ok',
@@ -110,7 +110,8 @@ class OrdersController {
       const updateOrder = await Orders.findOne({
         where: { source_id: req.body.id }
       })
-      console.log(2222 + req.body.closed_at)
+      const notRemoveProduct = req.body.line_items.filter((l) => l.fulfillable_quantity !== 0)
+      console.log(notRemoveProduct.map((r) => r.product_id))
       if (updateOrder) {
         updateOrder.update({
           source_id: req.body.id,
@@ -119,7 +120,7 @@ class OrdersController {
           order_number: req.body.order_number,
           customer_id: req.body.customer.id,
           closed_at: req.body.closed_at,
-          product_id: req.body.line_items.map((p) => p.product_id),
+          product_id: notRemoveProduct.map((p) => p.product_id),
           product_title: req.body.line_items.map((p) => p.title)
         })
       } else {
@@ -134,6 +135,8 @@ class OrdersController {
           product_id: req.body.line_items.map((p) => p.product_id),
           product_title: req.body.line_items.map((p) => p.title)
         })
+
+        // fulfillable_quantity:0
       }
     } catch (e) {
       next(e)
@@ -143,10 +146,13 @@ class OrdersController {
   static OrdersCancalledWebhook = async (req, res, next) => {
     try {
       console.log(req.body, req.query, req.headers)
-      /* const deleteOrder = await Orders.findOne({
+      const deleteOrder = await Orders.findOne({
         where: { source_id: req.body.id }
-      }) */
-      // await deleteOrder.destroy()
+      })
+      await deleteOrder.destroy()
+      res.json({
+        status: 'ok'
+      })
     } catch (e) {
       next(e)
     }

@@ -2,6 +2,8 @@ import Shopify from '@shopify/shopify-api'
 import Promise from 'bluebird'
 import Customer from '../models/Customer'
 import Address from '../models/Address'
+import Orders from '../models/Orders'
+import axios from 'axios'
 
 const { accessToken } = process.env
 const client = new Shopify.Clients.Rest('amazing-firm.myshopify.com', accessToken)
@@ -116,6 +118,70 @@ class CustomersController {
       res.json({
         status: 'ok',
         customerList
+      })
+    } catch (e) {
+      next(e)
+    }
+  }
+
+  static searchCustomer = async (req, res, next) => {
+    try {
+      const { query } = req.body
+      console.log(`${query}`)
+      const customer = await axios
+        .get(
+          `https://amazing-firm.myshopify.com/admin/api/2022-04/customers/search.json?access_token=${accessToken}&query=${query}`
+
+        ).then((res) => res.data)
+      res.json({
+        status: 'ok',
+        customer
+      })
+    } catch (e) {
+      next(e)
+    }
+  }
+
+  // https://amazing-firm.myshopify.com/admin/api/2022-04/customers/search.json?access_token=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&query=email:"devidson@gmail.com"
+
+  static getCustomerOrders = async (req, res, next) => {
+    try {
+      const perPage = 2
+      const { page } = req.query
+      const customerOrders = await Customer.findAll({
+        where: {},
+        attributes: ['first_name', 'last_name', 'email', 'total_spent', 'last_order_name'],
+        offset: (perPage * page),
+        limit: perPage,
+        include: [{
+          model: Orders,
+          as: 'order',
+          required: true,
+          where: {},
+          attributes: ['product_id', 'product_title', 'name', 'order_number']
+        }]
+      })
+      res.json({
+        status: 'ok',
+        customerOrders,
+        page
+      })
+    } catch (e) {
+      next(e)
+    }
+  }
+
+  static getCustomerOrdersFromShopify = async (req, res, next) => {
+    try {
+      const { customerId } = req.query // 6172901605599
+      const customerOrder = await axios
+        .get(
+          `https://amazing-firm.myshopify.com/admin/api/2022-04/customers/${customerId}/orders.json?access_token=${accessToken}`
+
+        ).then((res) => res.data)
+      res.json({
+        status: 'ok',
+        customerOrder
       })
     } catch (e) {
       next(e)
