@@ -1,5 +1,5 @@
 import Shopify from '@shopify/shopify-api'
-import { Customer, Orders } from '../models'
+import { Orders } from '../models'
 
 import axios from 'axios'
 
@@ -80,6 +80,46 @@ class OrdersController {
     }
   }
 
+  static orderArchive = async (req, res, next) => {
+    try {
+      const { orderId } = req.query
+      const arcivedOrder = await axios
+        .post(
+          `https://amazing-firm.myshopify.com/admin/api/2022-04/orders/${orderId}/close.json?access_token=${accessToken}`
+
+        ).then((res) => res.data)
+        .catch(e => {
+          return e.response.data
+        })
+      res.json({
+        status: 'ok',
+        arcivedOrder
+      })
+    } catch (e) {
+      next(e)
+    }
+  }
+
+  static unArchiveOrder = async (req, res, next) => {
+    try {
+      const { orderId } = req.query
+      const unArchive = await axios
+        .post(
+          `https://amazing-firm.myshopify.com/admin/api/2022-04/orders/${orderId}/open.json?access_token=${accessToken}`
+
+        ).then((res) => res.data)
+        .catch(e => {
+          return e.response.data
+        })
+      res.json({
+        status: 'ok',
+        unArchive
+      })
+    } catch (e) {
+      next(e)
+    }
+  }
+
   static ordersAddWebhook = async (req, res, next) => {
     try {
       console.log(req.body, req.query, req.headers)
@@ -111,6 +151,7 @@ class OrdersController {
         where: { source_id: req.body.id }
       })
       const notRemoveProduct = req.body.line_items.filter((l) => l.fulfillable_quantity !== 0)
+      const notCancelledOrder = req.body.filter((c) => c.cancelled_at === null)
       console.log(notRemoveProduct.map((r) => r.product_id))
       if (updateOrder) {
         updateOrder.update({
@@ -126,6 +167,16 @@ class OrdersController {
       } else {
         console.log(7777)
         await Orders.create({
+          source_id: notCancelledOrder.id,
+          email: notCancelledOrder.email,
+          name: notCancelledOrder.name,
+          order_number: notCancelledOrder.order_number,
+          customer_id: notCancelledOrder.customer.id,
+          closed_at: notCancelledOrder.closed_at,
+          product_id: notCancelledOrder.line_items.map((p) => p.product_id),
+          product_title: notCancelledOrder.line_items.map((p) => p.title)
+        })
+        /* await Orders.create({
           source_id: req.body.id,
           email: req.body.email,
           name: req.body.name,
@@ -134,7 +185,7 @@ class OrdersController {
           closed_at: req.body.closed_at,
           product_id: req.body.line_items.map((p) => p.product_id),
           product_title: req.body.line_items.map((p) => p.title)
-        })
+        }) */
 
         // fulfillable_quantity:0
       }

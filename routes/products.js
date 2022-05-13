@@ -45,7 +45,8 @@ router.post('/webhook-cancelled-orders', validateShopify(), OrdersController.Ord
 router.post('/webhook-orders-update', validateShopify(), OrdersController.ordersUpdateWebhook)
 router.post('/craeate-orders', OrdersController.addOrdersToShopify)
 router.put('/update-orders', OrdersController.updateOrdersToShopify)
+router.post('/order-archived', OrdersController.orderArchive)
+router.post('/order-unarchived', OrdersController.unArchiveOrder)
 router.delete('/delete-orders', OrdersController.orderDelete)
 
 export default router
-

@@ -106,8 +106,12 @@ class CustomersController {
 
   static getCustomerList = async (req, res, next) => {
     try {
+      const perPage = 2
+      const { page } = req.query
       const customerList = await Customer.findAll({
         where: {},
+        offset: (perPage * page),
+        limit: perPage,
         include: [{
           model: Address,
           as: 'address',
@@ -117,7 +121,8 @@ class CustomersController {
       })
       res.json({
         status: 'ok',
-        customerList
+        customerList,
+        page
       })
     } catch (e) {
       next(e)
